@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - healthy_food_set
+  - healthy_food
+  - junk_food
+  - life
+  - monster
+  - trap
+  - spawner
+  - BG
+  - platform
+  - world_score_table
+  - local_score_table
+  - death
+  - jump
+  - useful
+  - junk
+  - arrow
+  - down_button
+  - platform_child
+  - bonus
+  - points_text
+  - game_canvas
+  - moving_anchor
+  - bonus_sound
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 858366189
+    locked: 0
+  - name: Midground
+    uniqueID: 3241084769
+    locked: 0
+  - name: Foreground
+    uniqueID: 1805857445
+    locked: 0
+  - name: Characters
+    uniqueID: 1777866301
+    locked: 0
+  - name: UI
+    uniqueID: 923263145
+    locked: 0
+  - name: TopCanvas
+    uniqueID: 2411246727
+    locked: 0

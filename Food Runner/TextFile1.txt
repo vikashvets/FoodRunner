@@ -1,0 +1,155 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Threading;
+
+public class TutorialLevel : MonoBehaviour
+{
+    public TextMeshProUGUI InPanelInfoText;
+    public TextMeshProUGUI OutPanelInfoText;
+    private int NextPressCount = 0;
+    public Button NextButtonInPanel;
+    public Button NextButtonOutPanel;
+    private bool IsJumpPermitted = false;
+    public GameObject UsefulItem;
+    public GameObject JunkItem;
+    public GameObject Arrow;
+    public GameObject MovingArrow;
+    private GameObject[] Arrows;
+    private bool NotCatched = true;
+    private bool CatchTime = false;
+    float TimeBtwSpawn = 3f;
+    float StartTimeBtwSpawn = 3f;
+    private LevelManager GameLevelManager;
+    public GameObject BlackEmphPanel;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        NextButtonInPanel.onClick.AddListener(NextButtonClick);
+        NextButtonOutPanel.onClick.AddListener(NextButtonClick);
+        GameLevelManager = FindObjectOfType<LevelManager>();
+        BlackEmphPanel.SetActive(false);
+        TextChange("Hi, this is the Food Runner tutorial! Try to collect as many points as you can!", OutPanelInfoText);
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (IsJumpPermitted)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                StartCoroutine(Step1());
+                IsJumpPermitted = false;
+            }
+            /*
+            if (Input.touchCount > 0 & Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                StartCoroutine(Step1());
+                IsJumpPermitted = false;
+            }*/
+        }
+
+        if (CatchTime)
+        {
+
+            if (TimeBtwSpawn <= 0)
+            {
+                Instantiate(MovingArrow, new Vector3(10, 3, 0), Quaternion.identity);
+                Instantiate(UsefulItem, new Vector3(10, 0, 0), Quaternion.identity);
+                TimeBtwSpawn = StartTimeBtwSpawn;
+            }
+            else
+            {
+                TimeBtwSpawn -= Time.deltaTime;
+            }
+            if(GameLevelManager.score > 0)
+            {
+                Arrows = GameObject.FindGameObjectsWithTag("arrow");
+                for (int i = 0; i < Arrows.Length; i++)
+                {
+                    Destroy(Arrows[i]);
+                }
+                BlackEmphPanel.SetActive(false);
+                CatchTime = false;
+                StartCoroutine(Step2());
+            }
+        }
+
+        
+
+
+    }
+
+    public void TextChange(string CurrentText, TextMeshProUGUI Panel)
+    {
+        Panel.text = CurrentText;
+    }
+
+    IEnumerator StartChange()
+    {
+        TextChange("Hi, this is the Food Runner tutorial! Try to collect as many points as you can!", OutPanelInfoText);
+        yield return new WaitForSeconds(5);
+       
+        var PlayerArrow = Instantiate(Arrow, new Vector3(-2.5f, 1, 0), Quaternion.identity) as GameObject;
+        yield return new WaitForSeconds(5);
+        Destroy(PlayerArrow);
+        TextChange("This is a monster. He is chasing you and wants to eat you!But this tutorial will teach you how to prevent this.", InPanelInfoText);
+        var MonsterArrow = Instantiate(Arrow, new Vector3(-8, 1, 0), Quaternion.identity) as GameObject;
+        yield return new WaitForSeconds(5);
+
+        
+    }
+
+    IEnumerator Step1()
+    {
+        yield return new WaitForSeconds(3);
+        TextChange("Good job! Now try to collect useful food. Healthy food id highlighted in green. Jump using tap to catch it!", InPanelInfoText);
+        BlackEmphPanel.SetActive(true);
+        CatchTime = true;
+    }
+    IEnumerator Step2()
+    {
+        TextChange("Awesome! As you can see, you score has changed. Points were added to the score for a useful item, collected by you!", OutPanelInfoText);
+        var ScoreArrow = Instantiate(Arrow, new Vector3(3.5f, 1.5f, 0), Quaternion.identity) as GameObject;
+        ScoreArrow.transform.Rotate(180, 0, 0, Space.Self);
+        yield return new WaitForSeconds(3);
+        
+    }
+
+    void NextButtonClick()
+    {
+        GameObject PlayerArrow = null;
+        GameObject MonsterArrow = null;
+        if(NextPressCount == 0)
+        {
+            BlackEmphPanel.SetActive(true);
+            TextChange("This is the main character.You control him with taps.", InPanelInfoText);
+            PlayerArrow = Instantiate(Arrow, new Vector3(-2.5f, 1, 0), Quaternion.identity) as GameObject;
+            NextPressCount++;
+        }
+        if (NextPressCount == 1)
+        {
+            Destroy(PlayerArrow);
+            TextChange("This is a monster. He is chasing you and wants to eat you!But this tutorial will teach you how to prevent this.", InPanelInfoText);
+            MonsterArrow = Instantiate(Arrow, new Vector3(-8, 1, 0), Quaternion.identity) as GameObject;
+            NextPressCount++;
+
+        }
+        if (NextPressCount == 3)
+        {
+            BlackEmphPanel.SetActive(true);
+            Destroy(MonsterArrow);
+            TextChange("Ok, lets get started! Tap anywhere on the screen to jump. Two taps - double jump.", InPanelInfoText);
+            IsJumpPermitted = true;
+        }
+
+    }
+
+
+
+}
